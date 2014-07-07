@@ -42,5 +42,13 @@ def main():
     parser = make_parser()
     arguments = parser.parse_args(sys.argv[1:])
 
+    # Convert parsed arguments from Namespace to dictionary
+    arguments = vars(arguments)
+    command = arguments.pop("command")
+
+    if command == "put":
+       name, snippet = put(**arguments)
+       print "Stored '{}' as '{}'".format(snippet, name)
+
 if __name__ == "__main__":
     main()
