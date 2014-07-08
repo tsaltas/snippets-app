@@ -43,6 +43,20 @@ def put(name, snippet, filename):
         writer.writerow([name, snippet])
     logging.debug("Write sucessful")
     return name, snippet
+ 
+def get(name, filename):
+    """ Retrieve a snippet with an associated name in the CSV file """
+    logging.info("Retrieving snippet called {} from {}".format(name, filename))
+    logging.debug("Opening file")
+    with open(filename, "r") as f:
+        reader = csv.reader(f)
+        logging.debug("Reading snippet from file")
+        for row in reader:
+            if row[0] == name:
+                snippet = row[1]
+                logging.debug("Located snippet")
+                return name, snippet
+        return False
 
 def main():
     """ Main function """
@@ -57,6 +71,13 @@ def main():
     if command == "put":
        name, snippet = put(**arguments)
        print "Stored '{}' as '{}'".format(snippet, name)
+      
+    if command == "get":
+        if get(**arguments) != False:    
+            name, snippet = get(**arguments)
+            print "Retrieved '{}' as '{}'".format(snippet, name)
+        else:
+          print "Code snippet does not exist."
 
 if __name__ == "__main__":
     main()
