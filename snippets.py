@@ -51,12 +51,16 @@ def get(name, filename):
     with open(filename, "r") as f:
         reader = csv.reader(f)
         logging.debug("Reading snippet from file")
+        # look for the snippet in the rows of the CSV file
         for row in reader:
+            # if the snippet is found
             if row[0] == name:
                 snippet = row[1]
                 logging.debug("Located snippet")
+                # return the name and the snippet
                 return name, snippet
-        return False
+        # else, snippet must not exist, so raise an exception 
+        raise Exception()
 
 def main():
     """ Main function """
@@ -73,10 +77,12 @@ def main():
        print "Stored '{}' as '{}'".format(snippet, name)
       
     if command == "get":
-        if get(**arguments) != False:    
-            name, snippet = get(**arguments)
-            print "Retrieved '{}' as '{}'".format(snippet, name)
-        else:
+        # if get function does not raise an exception, it has found the snippet
+        try:
+          name, snippet = get(**arguments)
+          print "Retrieved '{}' as '{}'".format(snippet, name)
+        # if the snippet does not yet exist, an exception will be raised, and we should explain the issue to the user
+        except:
           print "Code snippet does not exist."
 
 if __name__ == "__main__":
