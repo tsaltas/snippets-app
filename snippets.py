@@ -31,6 +31,14 @@ def make_parser():
                             help="The snippet filename")
     put_parser.set_defaults(command="get")
     
+    # Subparser for the search command
+    logging.debug("Constructing search subparser")
+    put_parser = subparsers.add_parser("search", help="Search for a snippet containing a certain string")
+    put_parser.add_argument("string", help="String contained in a snippet")
+    put_parser.add_argument("filename", default="snippets.csv", nargs="?",
+                            help="The snippet filename")
+    put_parser.set_defaults(command="search")
+    
     return parser
 
 def put(name, snippet, filename):
@@ -62,6 +70,25 @@ def get(name, filename):
         # else, snippet must not exist, so raise an exception 
         raise Exception()
 
+def search(string, filename):
+    """ Search for a snippet containing the string in the CSV file """
+    logging.info("Searching for snippet containing {} from {}".format(string, filename))
+    logging.debug("Opening file")
+    # initialize an empty list to contain any matching snippets we find
+    snippet_list = []
+    with open(filename, "r") as f:
+        reader = csv.reader(f)
+        logging.debug("Searching for string in file")
+        # search for the string within the CSV file snippets
+        for row in reader:
+            # if the string is found within the snippet itself (not within snippet name)
+            if row[1].find(string) >= 0:
+                logging.debug("Located string within snippet")
+                # put the name and the snippet into the snippet list as a tuple
+                snippet_list.append((row[0], row[1]))
+    # after looking through all the rows, return the snippet list
+    return snippet_list    
+  
 def main():
     """ Main function """
     logging.info("Starting snippets")
@@ -84,6 +111,15 @@ def main():
         # if the snippet does not yet exist, an exception will be raised, and we should explain the issue to the user
         except:
           print "Code snippet does not exist."
-
+                                    
+    if command == "search":
+        snippet_list = search(**arguments)
+        # if search command returns nothing, tell the user
+        if len(snippet_list) == 0:
+            print "No matching code snippets were found."
+        else:
+            for snippet_tuple in snippet_list:
+                print snippet_tuple
+          
 if __name__ == "__main__":
     main()
