@@ -23,6 +23,7 @@ def make_parser():
                             help="The snippet filename")
     put_parser.set_defaults(command="put")
 
+<<<<<<< HEAD
     # Subparser for the get command
     logging.debug("Constructing get subparser")
     put_parser = subparsers.add_parser("get", help="Retrieve a snippet")
@@ -31,6 +32,8 @@ def make_parser():
                             help="The snippet filename")
     put_parser.set_defaults(command="get")
     
+=======
+>>>>>>> 86299dc190a515cd517440f7c4f8eb4c8618d280
     return parser
 
 def put(name, snippet, filename):
@@ -43,6 +46,7 @@ def put(name, snippet, filename):
         writer.writerow([name, snippet])
     logging.debug("Write sucessful")
     return name, snippet
+<<<<<<< HEAD
  
 def get(name, filename):
     """ Retrieve a snippet with an associated name in the CSV file """
@@ -57,6 +61,8 @@ def get(name, filename):
                 logging.debug("Located snippet")
                 return name, snippet
         return False
+=======
+>>>>>>> 86299dc190a515cd517440f7c4f8eb4c8618d280
 
 def main():
     """ Main function """
@@ -71,6 +77,7 @@ def main():
     if command == "put":
        name, snippet = put(**arguments)
        print "Stored '{}' as '{}'".format(snippet, name)
+<<<<<<< HEAD
       
     if command == "get":
         if get(**arguments) != False:    
@@ -78,6 +85,8 @@ def main():
             print "Retrieved '{}' as '{}'".format(snippet, name)
         else:
           print "Code snippet does not exist."
+=======
+>>>>>>> 86299dc190a515cd517440f7c4f8eb4c8618d280
 
 if __name__ == "__main__":
     main()
